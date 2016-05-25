@@ -21,45 +21,32 @@ namespace AspNetErandrosTools.Services
 
     public class Emailer
     {
-        private readonly IConfiguration _config;
-        private readonly EmailSettings _settings;
+        private readonly EmailSettings EmailSettings;
 
-        public IHostingEnvironment Env { get; private set; }
-
-        public Emailer(IConfiguration config, IHostingEnvironment env)
+        public Emailer(EmailSettings emailSettings)
         {
-            Env = env;
-            _config = config;
-            _settings = new EmailSettings()
-            {
-                Server = _config["Data:EmailSettings:Server"],
-                EnableSsl = Convert.ToBoolean(_config["Data:EmailSettings:EnableSsl"]),
-                Port = Convert.ToInt16(_config["Data:EmailSettings:Port"]),
-                UserName = _config["Data:EmailSettings:UserName"],
-                Password = _config["Data:EmailSettings:Password"],
-                DisplayName = _config["Data:EmailSettings:DisplayName"],
-            };
+            EmailSettings = emailSettings;
         }
 
         public Task SendEmailAsync(string to, string subject, string message, string bcc = null)
         {
             // Configure the client:
-            SmtpClient client = new System.Net.Mail.SmtpClient(_settings.Server);
+            SmtpClient client = new System.Net.Mail.SmtpClient(EmailSettings.Server);
 
-            client.Port = _settings.Port;
+            client.Port = EmailSettings.Port;
             client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
 
             // Create the credentials:
             System.Net.NetworkCredential credentials = new System.Net.NetworkCredential(
-                _settings.UserName, _settings.Password);
+                EmailSettings.UserName, EmailSettings.Password);
 
-            client.EnableSsl = _settings.EnableSsl;
+            client.EnableSsl = EmailSettings.EnableSsl;
             client.Credentials = credentials;
 
             // Create the message:
             var mail = new System.Net.Mail.MailMessage(
-                new MailAddress(_settings.UserName, _settings.DisplayName),
+                new MailAddress(EmailSettings.UserName, EmailSettings.DisplayName),
                 new MailAddress(to, to));
 
             if (!string.IsNullOrEmpty(bcc))
