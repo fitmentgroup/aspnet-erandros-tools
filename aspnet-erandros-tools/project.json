@@ -1,0 +1,20 @@
+﻿{
+  "version": "1.0.1-*",
+  "description": "A set of services, extension methods and filters for asp net 5",
+  "authors": [ "guido" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "frameworks": {
+    "net451": {
+      "frameworkAssemblies": {
+        "System.Data": "4.0.0.0"
+      }
+    }
+  },
+  "dependencies": {
+    "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc.ViewFeatures": "6.0.0-rc1-final",
+    "Microsoft.Net.Http": "2.2.22"
+  }
+}
